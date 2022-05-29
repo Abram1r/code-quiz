@@ -4,6 +4,11 @@ var nextButton = document.getElementById("next-btn")
 var questionContainerEl = document.getElementById("question-container")
 var questionEl = document.getElementById("question")
 var answerButtonsEl = document.getElementById("answer-buttons")
+var timerEl = document.querySelector("#time")
+// time for quiz
+var time = 70;
+var timerId;
+
 
 let shuffledQuestions, currentQuestionIndex
 
@@ -19,6 +24,10 @@ function startGame() {
     shuffledQuestions = questions.sort(() => Math.random() - .5)
     currentQuestionIndex = 0
     questionContainerEl.classList.remove("hide")
+    // start timer
+    timerId = setInterval(totalTime, 1000);
+    // display time
+    timerEl.textContent = time;
     setNextQuestion()
 }
 
@@ -67,7 +76,7 @@ function selectAnswer(e) {
 function setStatusClass(element, correct) {
     clearStatusClass(element)
     if (correct) {
-        element.classList.add("correct")
+        element.classList.add("correct");
     } else {
         element.classList.add("wrong")
     }
@@ -76,6 +85,21 @@ function setStatusClass(element, correct) {
 function clearStatusClass(element) {
     element.classList.remove("correct")
     element.classList.remove("wrong")
+}
+
+function totalTime() {
+    time--;
+    timerEl.textContent = time;
+    // end quiz if time = 0
+    if (time <= 0) {
+        endQuiz();
+    }
+}
+
+function endQuiz() {
+    clearInterval(timerId);
+    var scoreEl = document.getElementById("score");
+    scoreEl.textContent = time;
 }
 
 const questions = [
